@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
@@ -67,6 +69,29 @@ public class TaskController {
             if (tasks.get(i).getTitle().equalsIgnoreCase(title)) {
                 tasks.remove(i);
                 return ResponseEntity.ok().build();
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Update a task by its title
+     * 
+     * @param title the title of the task to update
+     * @param updatedTask the updated task data
+     * @return the updated task if found, or 404 if not found
+     */
+    @PutMapping("/{title}")
+    public ResponseEntity<TaskModel> updateTaskByTitle(@PathVariable String title, @RequestBody TaskModel updatedTask) {
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getTitle().equalsIgnoreCase(title)) {
+                TaskModel task = tasks.get(i);
+                task.setDescription(updatedTask.getDescription());
+                // If the title in the request body is not null and not empty, update the title too
+                if (updatedTask.getTitle() != null && !updatedTask.getTitle().isEmpty()) {
+                    task.setTitle(updatedTask.getTitle());
+                }
+                return ResponseEntity.ok(task);
             }
         }
         return ResponseEntity.notFound().build();
