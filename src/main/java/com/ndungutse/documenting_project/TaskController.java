@@ -1,6 +1,7 @@
 package com.ndungutse.documenting_project;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +50,23 @@ public class TaskController {
         for (TaskModel task : tasks) {
             if (task.getTitle().equalsIgnoreCase(title)) {
                 return ResponseEntity.ok(task);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Delete a task by its title
+     * 
+     * @param title the title of the task to delete
+     * @return 200 OK if deleted successfully, 404 if task not found
+     */
+    @DeleteMapping("/{title}")
+    public ResponseEntity<Void> deleteTaskByTitle(@PathVariable String title) {
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getTitle().equalsIgnoreCase(title)) {
+                tasks.remove(i);
+                return ResponseEntity.ok().build();
             }
         }
         return ResponseEntity.notFound().build();
