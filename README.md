@@ -137,3 +137,4 @@ mvn test
 The tests verify:
 - Getting tasks by title (both existing and non-existent tasks)
 - Deleting tasks by title (including verification of deletion)
+- Logging in users
